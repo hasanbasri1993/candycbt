@@ -31,7 +31,7 @@
 					
 					echo "
 						<td width='50%'>
-							<div class='box'>
+							<div  style='width:10.4cm;border:1px solid #666;'>
 								<table border='0' width='100%' align='center'>
 									<tr>
 										<td align='left' valign='top'>";

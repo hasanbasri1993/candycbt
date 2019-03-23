@@ -687,8 +687,28 @@
 											'total' => $skor
 										);
 										
-										delete('pengacak',$where);
-										update('nilai',$data,$where);
+										$mapelQ = mysql_query("SELECT * FROM jawaban WHERE id_mapel='$id_mapel' AND id_siswa='$id_siswa' ");
+										
+										while ($jawab = mysql_fetch_array($mapelQ)) {
+											
+											$dataJawaban = array(
+												'id_siswa' => $jawab['id_siswa'],
+												'id_mapel' => $jawab['id_mapel'],
+												'id_soal' => $jawab['id_soal'],
+												'jawaban' => $jawab['jawaban'],
+												'jenis' => $jawab['jenis'],
+												'esai' => $jawab['esai'],
+												'nilai_esai' => $jawab['nilai_esai'],
+												'ragu' => $jawab['ragu']
+											);
+											insert('hasil_jawaban', $dataJawaban);
+											
+											
+										}
+										
+										delete('jawaban', $where);
+										delete('pengacak', $where);
+										update('nilai', $data, $where);
 										jump("$homeurl");
 									}
 									update('nilai',array('ujian_berlangsung'=>$datetime),$where);
@@ -708,8 +728,13 @@
 														<h3 class='box-title'><span class='btn  bg-green' id='displaynum'><b>$no_next</b></span></h3>
 														<div class='box-title pull-right'>
 															<div class='btn-group'>
+																<button type='button' id='smaller_font' class='btn btn-primary' > - </button>
+																<button type='button' id='reset_font' class='btn btn-primary' >Reset</button>
+																<button type='button' id='bigger_font' class='btn btn-primary' > + </button>
+															</div>
+															<div class='btn-group'>
 																<span class='btn  bg-gray active'>WAKTU</span>
-																<span class='btn  bg-red'><b id='countdown'><span id='htmljam' >$jam</span>:<span id='htmlmnt'>$mnt</span>:<span id='htmldtk'>$dtk</span></b></span>
+																<span class='btn  bg-red'><b id='W'><span id='htmljam' >$jam</span>:<span id='htmlmnt'>$mnt</span>:<span id='htmldtk'>$dtk</span></b></span>
 															</div>
 															<div class='btn-group'>
 															<form action='' method='post'>
@@ -1097,6 +1122,7 @@
 				<script src='$homeurl/dist/js/app.min.js'></script>
 				<script src='$homeurl/plugins/sweetalert2/dist/sweetalert2.min.js'></script>
 				<script src='$homeurl/plugins/slidemenu/jquery-slide-menu.js'></script>
+				<script src='$homeurl/plugins/mousetrap/mousetrap.min.js'></script>
 				
 				<script>
 				
@@ -1116,46 +1142,132 @@
 					<script>
 						var homeurl;
 						homeurl = '$homeurl';
+						
+						/* Font Adjusments */
+						let defaultFontSize = 15;
+					    let fontSize = 0;
+					    	fontSize =localStorage.getItem('fontSize');
+					    if (!fontSize){
+					        fontSize = defaultFontSize;
+					        localStorage.setItem('fontSize',fontSize);
+					    }
+					    soalFont(fontSize)
+					    
+					    function soalFont(fontSize) {
+						    $( 'div.soal > p > span' ).css({fontSize: fontSize +'pt'});
+						    $( 'span.soal > p > span' ).css({fontSize: fontSize +'pt'});
+						    $('.soal').css({fontSize: fontSize +'pt'})
+							$('.callout soal').css({fontSize: fontSize +'pt'})
+					    }
+					    
+					    
 						$(document).ready(function() {
+						    
+						    $('#smaller_font').on('click', function() {
+						        fontSize = localStorage.getItem('fontSize')
+						        fontSize--;
+						        localStorage.setItem('fontSize',fontSize)
+								soalFont(fontSize)
+							});
+						 
+						    $('#bigger_font').on('click', function() {
+						        fontSize = localStorage.getItem('fontSize')
+						        fontSize++;
+						        localStorage.setItem('fontSize',fontSize)
+								soalFont(fontSize)
+							});
+						    
+						    $('#reset_font').on('click', function() {
+						        fontSize = defaultFontSize
+						        localStorage.setItem('fontSize',fontSize)
+								soalFont(fontSize)
+							});
+						 
+						    
+							Mousetrap.bind('enter', function () {
+							  loadsoal($id_mapel,$id_siswa,$no_next,1);
+							});
 							
+							Mousetrap.bind('right', function () {
+							  loadsoal($id_mapel,$id_siswa,$no_next,1);
+							});
+							
+							Mousetrap.bind('left', function () {
+							  loadsoal($id_mapel,$id_siswa,$no_prev,1);
+							});
+							
+							Mousetrap.bind('a', function () {
+							  $('#A').click()
+							});
+							
+							Mousetrap.bind('b', function () {
+							  $('#B').click()
+							});
+							
+							Mousetrap.bind('c', function () {
+							  $('#C').click()
+							});
+							
+							Mousetrap.bind('d', function () {
+							  $('#D').click()
+							});
+							
+							Mousetrap.bind('e', function () {
+							  $('#E').click()
+							});
+							
+							Mousetrap.bind('space', function () {
+							  $('input[type=checkbox]').click()
+							  radaragu($id_mapel,$id_siswa,$soal[id_soal])
+							});
 							$('.soal img').on('click', function() {
 							
 							console.log($(this).html());
 							});
 							$('#done-btn').click(function(){
-								var jawab = $('#jumjawab').val();
-								var soal = $('#jumsoal').val();
-								var belum=soal-jawab;
-								if(jawab==soal){
-								swal({
-									title: 'Apa kamu yakin telah selesai?',
-									
-									html:
-										' Pastikan kamu telah menyelesaikan semua soal dengan benar ! <br>' +
-										'Sudah Dijawab : <b>'+jawab + '</b> Belum dijawab : <b>'+belum+'</b>',
-									type: 'warning',
-									showCancelButton: true,
-									confirmButtonColor: '#3085d6',
-									cancelButtonColor: '#d33',
-									confirmButtonText: 'Iya'
-									}).then((result) => {
-									if (result.value) {
-										window.onbeforeunload = null;
-										$('#done-submit').click();
-									}
-								})
-								}
-								else{
-								swal({
-									  type: 'warning',
-									  title: 'Oops...',
-									  html: 'Masih ada soal yang masih belum dikerjakan !! <br>'+
-									 'Sudah Dijawab : <b>'+jawab + '</b> Belum dijawab : <b>'+belum+'</b>',
-									})	
-									
-								}
-                                
-                            });
+						          var jawab = $('#jumjawab').val();
+						          var soal = $('#jumsoal').val();
+						          var belum = soal-jawab;
+						          var ragu = 	$('[id^=badge]').hasClass('bg-yellow');
+						          if(jawab == soal){
+						              if(ragu){
+						               swal({
+						                type: 'warning',
+						                title: 'Oops...',
+						                html: 'Masih ada soal yang ragu !!',
+						              })
+						              }
+						              else{
+						                  swal({
+						              title: 'Apa kamu yakin telah selesai?',
+						
+						              html:
+						                ' Pastikan kamu telah menyelesaikan semua soal dengan benar ! <br>' +
+						                'Sudah Dijawab : <b>'+jawab + '</b> Belum dijawab : <b>'+belum+'</b>',
+						              type: 'warning',
+						              showCancelButton: true,
+						              confirmButtonColor: '#3085d6',
+						              cancelButtonColor: '#d33',
+						              confirmButtonText: 'Iya'
+						              }).then((result) => {
+						                if (result.value)
+						                  {	window.onbeforeunload = null;
+						                    $('#done-submit').click();
+						                  }
+						                })
+						              }
+						
+						          }
+						          else{
+						          swal({
+						              type: 'warning',
+						              title: 'Oops...',
+						              html: 'Masih ada soal yang masih belum dikerjakan !! <br>'+
+						             'Sudah Dijawab : <b>'+jawab + '</b> Belum dijawab : <b>'+belum+'</b>',
+						            })
+						
+						          }
+						});
 							$('.navs-slide').SlideMenu({
 							  expand: false,
 							  collapse: true
@@ -1233,6 +1345,7 @@
 										$('#displaynum').html(num);
 										$('#loadsoal').html(response);
 										$('.fa-spin').hide();
+										soalFont(fontSize)
 										//iCheckform();
 									}
 								});
