@@ -10,7 +10,7 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+07:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -38,7 +38,7 @@ CREATE TABLE `hasil_jawaban` (
   `esai` text NOT NULL,
   `nilai_esai` int(5) NOT NULL,
   `ragu` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -56,7 +56,7 @@ CREATE TABLE `jawaban` (
   `esai` text NOT NULL,
   `nilai_esai` int(5) NOT NULL,
   `ragu` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -68,7 +68,7 @@ CREATE TABLE `kelas` (
   `id_kelas` varchar(11) NOT NULL,
   `level` varchar(20) NOT NULL,
   `nama` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -79,7 +79,7 @@ CREATE TABLE `kelas` (
 CREATE TABLE `level` (
   `kode_level` varchar(5) NOT NULL,
   `keterangan` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -93,7 +93,7 @@ CREATE TABLE `log` (
   `type` varchar(20) NOT NULL,
   `text` varchar(20) NOT NULL,
   `date` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `log`
@@ -116,7 +116,7 @@ CREATE TABLE `login` (
   `id_siswa` int(11) NOT NULL,
   `ipaddress` varchar(20) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -140,7 +140,7 @@ CREATE TABLE `mapel` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` varchar(2) NOT NULL,
   `statusujian` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -151,7 +151,7 @@ CREATE TABLE `mapel` (
 CREATE TABLE `mata_pelajaran` (
   `kode_mapel` varchar(20) NOT NULL,
   `nama_mapel` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -174,7 +174,7 @@ CREATE TABLE `nilai` (
   `status` int(1) NOT NULL,
   `ipaddress` varchar(20) NOT NULL,
   `hasil` int(2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -186,9 +186,9 @@ CREATE TABLE `pengacak` (
   `id_pengacak` int(11) NOT NULL,
   `id_siswa` int(11) NOT NULL,
   `id_mapel` int(11) NOT NULL,
-  `id_soal` varchar(255) NOT NULL,
+  `id_soal` varchar(2000) NOT NULL,
   `id_esai` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pengacak`
@@ -242,7 +242,7 @@ CREATE TABLE `pengawas` (
   `kewarganegaraan` varchar(10) NOT NULL,
   `npwp` varchar(16) NOT NULL,
   `foto` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pengawas`
@@ -275,7 +275,7 @@ CREATE TABLE `pengumuman` (
   `user` int(3) NOT NULL,
   `text` longtext NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -287,7 +287,7 @@ CREATE TABLE `pk` (
   `id_pk` varchar(10) NOT NULL,
   `program_keahlian` varchar(50) NOT NULL,
   `kode` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -298,7 +298,7 @@ CREATE TABLE `pk` (
 CREATE TABLE `ruang` (
   `kode_ruang` varchar(10) NOT NULL,
   `keterangan` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -311,7 +311,7 @@ CREATE TABLE `school` (
   `npsn` text NOT NULL,
   `ns` varchar(50) DEFAULT NULL,
   `alamat` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -323,7 +323,7 @@ CREATE TABLE `server` (
   `kode_server` varchar(20) NOT NULL,
   `nama_server` varchar(30) NOT NULL,
   `status` varchar(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `server`
@@ -343,7 +343,7 @@ INSERT INTO `server` (`kode_server`, `nama_server`, `status`) VALUES
 CREATE TABLE `sesi` (
   `kode_sesi` varchar(10) NOT NULL,
   `nama_sesi` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -355,7 +355,7 @@ CREATE TABLE `session` (
   `id` int(11) NOT NULL,
   `session_time` varchar(10) NOT NULL,
   `session_hash` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `session`
@@ -389,7 +389,7 @@ CREATE TABLE `setting` (
   `header` text NOT NULL,
   `header_kartu` text NOT NULL,
   `ip_server` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `setting`
@@ -454,7 +454,7 @@ CREATE TABLE `siswa` (
   `penghasilan_wali` varchar(50) NOT NULL,
   `angkatan` int(5) NOT NULL,
   `nisn` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -481,7 +481,7 @@ CREATE TABLE `soal` (
   `fileC` text,
   `fileD` text,
   `fileE` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -494,7 +494,7 @@ CREATE TABLE `token` (
   `token` varchar(6) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `masa_berlaku` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `token`
@@ -537,7 +537,7 @@ CREATE TABLE `ujian` (
   `pengawas` varchar(30) NOT NULL,
   `nip_pengawas` varchar(30) NOT NULL,
   `catatan` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Indexes for dumped tables
