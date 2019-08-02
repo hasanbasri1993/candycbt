@@ -1,44 +1,44 @@
-
 <?php
 	require("../config/config.default.php");
 	require("../config/config.function.php");
 	require("../config/functions.crud.php");
 	(isset($_SESSION['id_pengawas'])) ? $id_pengawas = $_SESSION['id_pengawas'] : $id_pengawas = 0;
-	($id_pengawas==0) ? header('location:index.php'):null;
+	($id_pengawas == 0) ? header('location:index.php') : null;
 	echo "<link rel='stylesheet' href='../dist/bootstrap/css/bootstrap.min.css'/>";
 	$BatasAwal = 50;
 	$sesi = @$_GET['id_sesi'];
-	$mapel =@$_GET['id_mapel'];
-	$ruang =@$_GET['id_ruang'];
-	$kelas =@$_GET['id_kelas'];
-	$querytanggal=mysql_query("SELECT * FROM ujian WHERE id_mapel='$mapel'");
-	$cektanggal=mysql_fetch_array($querytanggal);
-	$mapelx=mysql_fetch_array(mysql_query("select * from mapel where id_mapel='$mapel'"));					
-	$namamapel=	mysql_fetch_array(mysql_query("select * from mata_pelajaran where kode_mapel='$mapelx[nama]'"));					
-	if(date('m')>=7 AND date('m')<=12) {
-		$ajaran = date('Y')."/".(date('Y')+1);
-	}
-	elseif(date('m')>=1 AND date('m')<=6) {
-		$ajaran = (date('Y')-1)."/".date('Y');
-	}
-	$query=mysql_query("SELECT * FROM siswa ");
+	$mapel = @$_GET['id_mapel'];
+	$ruang = @$_GET['id_ruang'];
+	$ruang_ = mysql_fetch_array(mysql_query("select * from ruang where kode_ruang='$ruang'"));
 	
-	$querysetting=mysql_query("SELECT * FROM setting WHERE id_setting='1'");
-	$setting=mysql_fetch_array($querysetting);
+	$kelas = @$_GET['id_kelas'];
+	$querytanggal = mysql_query("SELECT * FROM ujian WHERE id_mapel='$mapel'");
+	$cektanggal = mysql_fetch_array($querytanggal);
+	$mapelx = mysql_fetch_array(mysql_query("select * from mapel where id_mapel='$mapel'"));
+	$namamapel = mysql_fetch_array(mysql_query("select * from mata_pelajaran where kode_mapel='$mapelx[nama]'"));
+	if (date('m') >= 7 AND date('m') <= 12) {
+		$ajaran = date('Y') . "/" . (date('Y') + 1);
+	} elseif (date('m') >= 1 AND date('m') <= 6) {
+		$ajaran = (date('Y') - 1) . "/" . date('Y');
+	}
+	$query = mysql_query("SELECT * FROM siswa ");
+	
+	$querysetting = mysql_query("SELECT * FROM setting WHERE id_setting='1'");
+	$setting = mysql_fetch_array($querysetting);
 	$jumlahData = mysql_num_rows($query);
 	$jumlahn = $jumlahData;
-	$n = ceil($jumlahData/$jumlahn);
+	$n = ceil($jumlahData / $jumlahn);
 	$nomer = 1;
-	$date=date_create($cektanggal['tgl_ujian']);
+	$date = date_create($cektanggal['tgl_ujian']);
 	
-	echo'
+	echo '
 	<table border="0" width="100%">
     <tr>
-	<td  width="70" align="left"><img src="../'.$setting['logo'].'"  height=80></td>
+	<td  width="70" align="left"><img src="../' . $setting['logo'] . '"  height=80></td>
     <td>
 	<b><center><font size="+1">DAFTAR HADIR PESERTA </font>
     <br><font size="+1">UJIAN SEKOLAH BERBASIS KOMPUTER</font>
-    <br><font size="+1"><b>TAHUN PELAJARAN : '. $ajaran.'</b></font>
+    <br><font size="+1"><b>TAHUN PELAJARAN : ' . $ajaran . '</b></font>
 	</b>
 	</center>
 	</td> 
@@ -48,62 +48,79 @@
 	
 	<table border="0" width="100%" style="margin-left:0px">
 	<tr height="30">
-	<td height="30" width="20%">-Mata Pelajaran</td>
+	<td height="30" width="20%">Nama Ujian</td>
 	<td height="30" width="2%">:</td>
-	<td height="30" width="45%" >'.$namamapel['nama_mapel'].'</td>
+	<td height="30" width="45%" >' . $mapelx['nama'] . '</td>
 	
   
 	<td height="30" width="15%" style="margin-left:10px"> Sesi</td>
     <td height="30" width="2%"> : </td>
-	<td height="30" width="15%">'.$sesi.'</td>
+	<td height="30" width="15%">' . $sesi . '</td>
 	</tr>
 	<tr height="30">
-	<td height="30" width="20%">-Hari/Tanggal</td>
+	<td height="30" width="20%">Hari/Tanggal</td>
 	<td height="30" width="2%">:</td>
-	<td height="30" width="45%" >'.buat_tanggal('D, d M Y',$cektanggal['tgl_ujian']).'</td>
+	<td height="30" width="45%" >' . buat_tanggal('D, d M Y', $cektanggal['tgl_ujian']) .' |  '.buat_tanggal('H:i', $cektanggal['tgl_ujian']) . '</td>
 	
-	<td height="30" width="20%" style="margin-left:10px"> Waktu Ujian </td>
+	<td height="30" width="20%" style="margin-left:10px"> Ruang </td>
     <td height="30" width="1%">:</td>
-	<td height="30" width="20%" >'.buat_tanggal('H:i',$cektanggal['tgl_ujian']).'</td>
+	<td height="30" width="20%" >' . $ruang_['keterangan'] . '</td>
+	</tr>
+	
+	<tr height="30">
+	<td height="30" width="20%">Pukul</td>
+	<td height="30" width="2%">:</td>
+	<td height="30" width="45%" >' . buat_tanggal('H:i', $cektanggal['tgl_ujian']) .' -  '.buat_tanggal('H:i', $cektanggal['tgl_selesai']) . '</td>
+	
+	<td colspan="3" height="30" width="20%" style="margin-left:10px">  </td>
 	</tr>
 	</table>
 	
 	
 	
 	';
-	for($i=1;$i<=$n;$i++){
-	echo '
-	  <table class="table table-bordered" width="100%">
-	<tr height="40">
-	<th width="5%" style="text-align: center;">No.</th>
-	<th width="13%" style="text-align: center;">No. Ujian</th>
-	<th width="30%" style="text-align: center;">Nama Siswa</th>
-	<th width="24%"style="text-align: center;">Tanda Tangan</th>
-	<th colspan="2" width="7%" style="text-align: center;">Ket</th>
-	</tr>';
-	$mulai = $i-1;
-	$batas = ($mulai*$jumlahn);
-	$startawal = $batas;
-	$batasakhir = $batas+$jumlahn;
-	if(!$sesi=='' and !$ruang=='' and !$kelas==''){
-	$ckck=mysql_query("SELECT * FROM siswa WHERE sesi='$sesi' and ruang='$ruang' and id_kelas='$kelas' limit $batas,$jumlahn");
-	}elseif($sesi=='' and !$ruang=='' and !$kelas==''){
-	$ckck=mysql_query("SELECT * FROM siswa WHERE  ruang='$ruang' and id_kelas='$kelas' limit $batas,$jumlahn");	
-	}elseif($sesi=='' and $ruang=='' and !$kelas==''){
-	$ckck=mysql_query("SELECT * FROM siswa WHERE  id_kelas='$kelas' limit $batas,$jumlahn");	
-	}elseif(!$sesi=='' and $ruang=='' and $kelas==''){
-	$ckck=mysql_query("SELECT * FROM siswa WHERE  sesi='$sesi' limit $batas,$jumlahn");	
-	}elseif(!$sesi=='' and !$ruang=='' and $kelas==''){
-	$ckck=mysql_query("SELECT * FROM siswa WHERE  sesi='$sesi' and ruang='$ruang' limit $batas,$jumlahn");	
-	}elseif($sesi=='' and !$ruang=='' and $kelas==''){
-	$ckck=mysql_query("SELECT * FROM siswa WHERE   ruang='$ruang' limit $batas,$jumlahn");	
-	}else{
-	$ckck=mysql_query("SELECT * FROM siswa  limit $batas,$jumlahn");	
+	for ($i = 1; $i <= $n; $i++) {
+		echo '
+	
+	<style>
+	
+	@media print {
+		th {
+		    color: #000;
+		    border: 1px solid #000;
+		    border-top: 1px solid #000;
+		    background: #C4BC96;
+		    padding: 3px;
+		    border: 1px solid #000;
+		}
 	}
-	$s = $i-1;
-	while($f= mysql_fetch_array($ckck)){
-	if ($nomer % 2 == 0) {
-	  echo "
+
+	</style>
+	  <table class="table table-bordered table-striped" width="100%">
+		<tr height="40">
+			<th width="5%" style="text-align: center;">No.</th>
+			<th width="13%" style="text-align: center;">Username</th>
+			<th width="30%" style="text-align: center;">Nama Siswa</th>
+			<th width="24%"style="text-align: center;">Tanda Tangan</th>
+			<th colspan="2" width="7%" style="text-align: center;">Ket</th>
+		</tr>';
+		$mulai = $i - 1;
+		$batas = ($mulai * $jumlahn);
+		$startawal = $batas;
+		$batasakhir = $batas + $jumlahn;
+		if (!$sesi == '' and !$ruang == '') {
+			$ckck = mysql_query("SELECT * FROM siswa WHERE sesi='$sesi' and ruang='$ruang' limit $batas,$jumlahn");
+		} elseif ($sesi == '' and !$ruang == '') {
+			$ckck = mysql_query("SELECT * FROM siswa WHERE ruang='$ruang' limit $batas,$jumlahn");
+		} elseif (!$sesi == '' and $ruang == '') {
+			$ckck = mysql_query("SELECT * FROM siswa WHERE sesi='$sesi' limit $batas,$jumlahn");
+		} else {
+			$ckck = mysql_query("SELECT * FROM siswa limit $batas,$jumlahn");
+		}
+		$s = $i - 1;
+		while ($f = mysql_fetch_array($ckck)) {
+			if ($nomer % 2 == 0) {
+				echo "
 	  <tr height=30px>
 	  <td align='center'>&nbsp;$nomer.</td>
 	  <td align='center'>$f[nis]</td>
@@ -111,19 +128,19 @@
 	  <td align='center'>&nbsp;$nomer.</td>
 	  <td align='center'>&nbsp;</td>
 	  </tr>";
-	  } else {
-	  echo "<tr height=30px>
+			} else {
+				echo "<tr height=30px>
 	  <td align='center'>&nbsp;$nomer.</td>
 	  <td align='center'>$f[nis]</td></center>
 	  <td>&nbsp;$f[nama]</td>
 	  <td align='left'>&nbsp;$nomer.</td>
 	  <td align='center'>&nbsp;</td>
 	  </tr>";
-	  }
-	  $nomer++;
-	  
-	}	
-	echo '
+			}
+			$nomer++;
+			
+		}
+		echo '
 	</table>
 	';
 	}
@@ -153,11 +170,4 @@
 	<td width="15%" style="font-size: small;text-align: center;">(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</td>
 	<td width="15%" style="font-size: small;text-align: center;">(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</td></tr>
     
-	</table>
-	
-	
-	
-	 
-	
-	';
-?>
+	</table>';

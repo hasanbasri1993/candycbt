@@ -1,37 +1,38 @@
 <?php
-$pesan='';
-						if(isset($_POST['simpanserver'])){
-							$kode=$_POST['kodeserver'];
-							$nama=$_POST['namaserver'];
-							$status=$_POST['status'];
-							$cek=mysql_num_rows(mysql_query("select * from server where kode_server='$kode'"));
-							if($cek==0){
-							$exec=mysql_query("INSERT INTO server (kode_server,nama_server,status)value('$kode','$nama','$status')");
-							$pesan= "<div class='alert alert-success alert-dismissible'>
+	$pesan = '';
+	if (isset($_POST['simpanserver'])) {
+		$kode = $_POST['kodeserver'];
+		$nama = $_POST['namaserver'];
+		$status = $_POST['status'];
+		$cek = mysql_num_rows(mysql_query("select * from server where kode_server='$kode'"));
+		if ($cek == 0) {
+			$exec = mysql_query("INSERT INTO server (kode_server,nama_server,status)value('$kode','$nama','$status')");
+			$pesan = "<div class='alert alert-success alert-dismissible'>
 										<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>×</button>
 										<i class='icon fa fa-info'></i>
 										Data Berhasil ditambahkan ..
 										</div>";
-							}else{
-								$pesan= "<div class='alert alert-warning alert-dismissible'>
+		} else {
+			$pesan = "<div class='alert alert-warning alert-dismissible'>
 										<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>×</button>
 										<i class='icon fa fa-info'></i>
 										Maaf Kode server Sudah ada !
 										</div>";
-							}
-						}
-						if(isset($_POST['editserver'])){
-							$kode=$_POST['kodeserver'];
-							$nama=$_POST['namaserver'];
-							$status=$_POST['status'];
-							$exec=mysql_query("UPDATE server set nama_server='$nama',status='$status' where kode_server='$kode'");
-							$pesan= "<div class='alert alert-success alert-dismissible'>
+		}
+	}
+	if (isset($_POST['editserver'])) {
+		$kode = $_POST['kodeserver'];
+		$nama = $_POST['namaserver'];
+		$status = $_POST['status'];
+		$status_sycn = $_POST['status_sycn'];
+		$exec = mysql_query("UPDATE server set nama_server='$nama',status='$status' ,status_sycn='$status_sycn'where kode_server='$kode'");
+		$pesan = "<div class='alert alert-success alert-dismissible'>
 										<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>×</button>
 										<i class='icon fa fa-info'></i>
 										Data Berhasil diperbaharui ..
 									</div>";
-						}
-						echo "
+	}
+	echo "
 								<div class='row'><div class='col-md-12'>$pesan</div>
 									<div class='col-md-12'>
 										<div class='box box-primary'>
@@ -52,29 +53,37 @@ $pesan='';
 															<th>Kode server</th>
 															<th>Nama Server</th>
 															<th>Status Server</th>
+															<th>Status Sycn</th>
 															<th></th>
 															
 															
 														</tr>
 													</thead>
 													<tbody>";
-													
-													$serverQ = mysql_query("SELECT * FROM server ORDER BY nama_server ASC");
-								
-													while($server = mysql_fetch_array($serverQ)) {
-														$no++; 
-														echo "
+	
+	$serverQ = mysql_query("SELECT * FROM server ORDER BY nama_server ASC");
+	
+	while ($server = mysql_fetch_array($serverQ)) {
+		$no++;
+		echo "
 															<tr>
 																<td>$no</td>
 																<td>$server[kode_server]</td>
 																<td>$server[nama_server]</td>
 																<td>";
-																if($server['status']=='aktif'){
-																	echo "<label class='label label-success'>$server[status]</label></td>";
-																}else{
-																	echo "<label class='label label-warning'>$server[status]</label></td>";
-																}
-																echo "
+		if ($server['status'] == 'aktif') {
+			echo "<label class='label label-success'>$server[status]</label></td>";
+		} else {
+			echo "<label class='label label-warning'>$server[status]</label></td>";
+		}
+		echo "
+																<td>";
+		if ($server['status_sycn'] == 'sudah') {
+			echo "<label class='label label-success'>$server[status_sycn]</label></td>";
+		} else {
+			echo "<label class='label label-warning'>$server[status_sycn]</label></td>";
+		}
+		echo "</td>
 																<td align='center'>
 																	<div class='btn-group'>
 																			<a><button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editserver$server[kode_server]'><i class='fa fa-pencil-square-o'></i></button></a>
@@ -82,16 +91,16 @@ $pesan='';
 																	</div>
 																</td>
 															</tr>";
-											$sql=mysql_query("select * from server where kode_server='$server[kode_server]'");
-											$sqlx=mysql_fetch_array($sql);
-											
-											$info = info("Anda yakin akan menghapus Nama Server $server[kode_server] ini  ?");
-											if(isset($_POST['hapus'])) {
-												$exec = mysql_query("DELETE from server where kode_server='$_POST[idu]'");
-												(!$exec) ? $info = info("Gagal menghapus!","NO") : jump("?pg=$pg");
-	
-											}
-											echo "
+		$sql = mysql_query("select * from server where kode_server='$server[kode_server]'");
+		$sqlx = mysql_fetch_array($sql);
+		
+		$info = info("Anda yakin akan menghapus Nama Server $server[kode_server] ini  ?");
+		if (isset($_POST['hapus'])) {
+			$exec = mysql_query("DELETE from server where kode_server='$_POST[idu]'");
+			(!$exec) ? $info = info("Gagal menghapus!", "NO") : jump("?pg=$pg");
+			
+		}
+		echo "
 															
 													<div class='modal fade' id='hapus$server[kode_server]' style='display: none;'>
 													<div class='modal-dialog'>
@@ -143,6 +152,13 @@ $pesan='';
 																<option value='tidak'>tidak</option>
 																</select>
 															</div>
+															<div class='form-group'>
+																<label>Status Sycn</label>
+																<select class='form-control' name='status_sycn'>
+																<option value='sudah'>sudah</option>
+																<option value='belum'>belum</option>
+																</select>
+															</div>
 															<div class='modal-footer'>
 															<div class='box-tools pull-right btn-group'>
 																<button type='submit' name='editserver' class='btn btn-sm btn-success'><i class='fa fa-check'></i> Simpan</button>
@@ -158,8 +174,8 @@ $pesan='';
 															<!-- /.modal-dialog -->
 															</div>
 														";
-													}
-													echo "
+	}
+	echo "
 													</tbody>
 												</table>
 												</div>
@@ -203,9 +219,4 @@ $pesan='';
 															<!-- /.modal-content -->
 															</div>
 															<!-- /.modal-dialog -->
-															</div>
-															
-															
-								
-						";
-						?>
+															</div>";

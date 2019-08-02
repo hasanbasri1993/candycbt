@@ -3,6 +3,7 @@
 	require("config/config.default.php");
 	require("config/config.function.php");
 	require("config/functions.crud.php");
+	
 	(isset($_SESSION['id_siswa'])) ? $id_siswa = $_SESSION['id_siswa'] : $id_siswa = 0;
 	($id_siswa == 0) ? header("Location:$homeurl/login.php") : null;
 	($pg == 'testongoing') ? $sidebar = 'sidebar-collapse' : $sidebar = '';
@@ -57,10 +58,10 @@
 										<a href='#' class='dropdown-toggle' data-toggle='dropdown'>
 										";
 	
-	if(!file_exists("foto/fotosiswa/$siswa[no_peserta].jpg")){
+	if (!file_exists("foto/fotosiswa/$siswa[foto]")) {
 		echo "<img src='$homeurl/dist/img/avatar_default.png' class='user-image'   alt='+'>";
-	}else{
-		echo "<img src='$homeurl/foto/fotosiswa/$siswa[no_peserta].jpg' class='user-image'   alt='+'>";
+	} else {
+		echo "<img src='$homeurl/foto/fotosiswa/$siswa[foto]' class='user-image'   alt='+'>";
 	}
 	echo "
 											
@@ -69,10 +70,10 @@
 										<ul class='dropdown-menu'>
 											<li class='user-header'>";
 	
-	if(!file_exists("foto/fotosiswa/$siswa[no_peserta].jpg")){
+	if (!file_exists("foto/fotosiswa/$siswa[foto]")) {
 		echo "<img src='$homeurl/dist/img/avatar_default.png' class='img-circle' alt='User Image'>";
-	}else{
-		echo "<img src='$homeurl/foto/fotosiswa/$siswa[no_peserta].jpg' class='img-circle' alt='User Image'>";
+	} else {
+		echo "<img src='$homeurl/foto/fotosiswa/$siswa[foto]' class='img-circle' alt='User Image'>";
 	}
 	echo "
 												
@@ -98,10 +99,10 @@
 							<div class='user-panel'>
 								<div class='pull-left image' >";
 	
-	if(!file_exists("foto/fotosiswa/$siswa[no_peserta].jpg")){
+	if (!file_exists("foto/fotosiswa/$siswa[foto]")) {
 		echo "<img src='$homeurl/dist/img/avatar_default.png' class='img'  style='max-width:60px' alt='+'>";
-	}else{
-		echo "<img src='$homeurl/foto/fotosiswa/$siswa[no_peserta].jpg' class='img'  style='max-width:60px' alt='+'>";
+	} else {
+		echo "<img src='$homeurl/foto/fotosiswa/$siswa[foto]' class='img'  style='max-width:60px' alt='+'>";
 	}
 	echo "
 								
@@ -686,8 +687,6 @@
 					'ragu' => $jawab['ragu']
 				);
 				insert('hasil_jawaban', $dataJawaban);
-				
-				
 			}
 			
 			delete('jawaban', $where);
@@ -697,6 +696,7 @@
 		}
 		update('nilai', array('ujian_berlangsung' => $datetime), $where);
 		$nilai = fetch('nilai', $where);
+		
 		$habis = strtotime($nilai['ujian_berlangsung']) - strtotime($nilai['ujian_mulai']);
 		$detik = ($mapel['lama_ujian'] * 60) - $habis;
 		$dtk = $detik % 60;
@@ -709,25 +709,24 @@
 											<div class='col-md-12'>
 												<div class='box box-solid'>
 													<div class='box-header bg-teal'>
-														<h3 class='box-title'><span class='btn  bg-green' id='displaynum'><b>$no_next</b></span></h3>
+														<h3 class='box-title'><span class='btn hidden-xs bg-gray active'>SOAL NO </span> <span class='btn  bg-green' id='displaynum'><b>$no_next</b></span></h3>
+														<div class='btn-group'>
+																<button type='button' id='smaller_font' class='btn bg-purple' > - </button>
+																<button type='button' id='reset_font' class='btn bg-purple' ><i class='fa fa-refresh'></i></button>
+																<button type='button' id='bigger_font' class='btn bg-purple' > + </button>
+														</div>
 														<div class='box-title pull-right'>
 															<div class='btn-group'>
-																<button type='button' id='smaller_font' class='btn btn-primary' > - </button>
-																<button type='button' id='reset_font' class='btn btn-primary' >Reset</button>
-																<button type='button' id='bigger_font' class='btn btn-primary' > + </button>
-															</div>
-															<div class='btn-group'>
-																<span class='btn  bg-gray active'>WAKTU</span>
+																<span class='btn hidden-xs bg-gray active'>WAKTU</span>
 																<span class='btn  bg-red'><b id='countdown'><span id='htmljam' >$jam</span>:<span id='htmlmnt'>$mnt</span>:<span id='htmldtk'>$dtk</span></b></span>
 															</div>
 															<div class='btn-group'>
 																<form action='' method='post'>
                                                                     <input type='submit' name='done' id='done-submit' style='display:none;'/>
-																	<button type='button' id='done-btn' class='btn btn-primary' >Selesai</button>
 																</form>
 															</div>
 														</div>
-													</div><!-- /.box-header -->
+													</div><!-- /.box-header --><!-- /.box-header -->
 													<div id='loadsoal'>
 														<div class='box-body'>
 															<div class='callout soal'>$soal[soal]</div>
@@ -1164,7 +1163,7 @@
 						    
 							
 						    Mousetrap.bind('enter', function () {
-		                    	loadsoal($id_mapel,$id_siswa,$no_next,1);
+		                    loadsoal($id_mapel,$id_siswa,$no_next,1);
 			                });
 	                        
 	                        Mousetrap.bind('right', function () {
@@ -1187,6 +1186,7 @@
 								$('#C').click()
 	                        });
 	                        
+	                        
 	                        Mousetrap.bind('d', function () {
 								$('#D').click()
 	                        });
@@ -1195,8 +1195,11 @@
 								$('#E').click()
 	                        });
 	                        
+	                        
 	                        Mousetrap.bind('space', function () {
+
 			                    $('input[type=checkbox]').click()
+			                    radaragu($id_mapel,$id_siswa,$soal[id_soal])
 			                });
                    
 						    
@@ -1206,7 +1209,7 @@
 							console.log($(this).html());
 							});
 							
-							$('#done-btn').click(function(){
+							$(document).on('click','.done-btn',function(){
 								var jawab = $('#jumjawab').val();
 								var soal = $('#jumsoal').val();
 								var belum = soal-jawab;

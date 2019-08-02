@@ -414,11 +414,11 @@
 										plugins: [
 											'advlist autolink lists link image charmap print preview hr anchor pagebreak',
 											'searchreplace wordcount visualblocks visualchars code fullscreen',
-											'insertdatetime media nonbreaking save table contextmenu directionality',
+											'insertdatetime media nonbreaking save table contextmenu directionality localautosave',
 											'emoticons template paste textcolor colorpicker textpattern imagetools uploadimage paste formula'
 										],
 										
-										toolbar: 'bold italic fontselect fontsizeselect | alignleft aligncenter alignright bullist numlist  backcolor forecolor | formula code | imagetools link image paste ',
+										toolbar: 'localautosave | bold italic underline fontselect fontsizeselect | alignleft aligncenter alignright bullist numlist  backcolor forecolor | formula code | imagetools link image paste | ltr rtl',
 										fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 										paste_data_images: true,
 										

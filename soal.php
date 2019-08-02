@@ -62,7 +62,7 @@
 				echo "File tidak didukung!";
 			}
 		}
-		
+		//test test
 		echo "
 					</div>
 						<div class='col-md-7'>";
@@ -271,13 +271,37 @@
 						<div id='load-ragu'>
 							<a href='#' class='btn  btn-warning'><input id='ragu' type='checkbox' onclick=radaragu($id_mapel,$id_siswa,$soal[id_soal]) $ragu/> RAGU</a>
 						</div>
-					</div></td><td>
+					</div></td><td>";
+		$jumsoalpg = $mapel['tampil_pg'];
+		$jumsoalesai = $mapel['tampil_esai'];
+		$cekno_soal = $no_soal + 1;
+		if (($no_soal >= 0) && ($cekno_soal < $jumsoalpg)) {
+			echo "
 					<div class='col-md-4 text-right'>
 						<i class='fa fa-spin fa-spinner' id='spin-next' style='display:none;'></i>
-						<button id='move-next' class='btn  btn-primary' onclick=loadsoal($id_mapel,$id_siswa,$no_next,1)><span class='hidden-xs'>SELANJUTNYA</span><i class='fa fa-chevron-right'></i></button>
-					</div></td></tr>
+						<button id='move-next' class='btn  btn-primary' onclick=loadsoal($id_mapel,$id_siswa,$no_next,1)><span class='hidden-xs'>SELANJUTNYA </span><i class='fa fa-chevron-right'></i></button>
+					</div>";
+		} elseif (($no_soal >= 0) && ($cekno_soal = $jumsoalpg) && ($jumsoalesai == 0)) {
+			echo "
+					<div class='col-md-4 text-right'>
+					
+						<input type='submit' name='done' id='done-submit' style='display:none;'/>
+						<button class='done-btn btn btn-danger'><span class='hidden-xs'>TEST </span>SELESAI</button>
+						
+					</div>";
+		} elseif (($no_soal >= 0) && ($cekno_soal = $jumsoalpg) && ($jumsoalesai > 0)) {
+			echo "
+					<div class='col-md-4 text-right'>
+						<i class='fa fa-spin fa-spinner' id='spin-next' style='display:none;'></i>
+						<button id='badgeesai$id_esai' class='btn  btn-success' onclick=loadsoalesai($id_mapel,$id_siswa,0,2)><span class='hidden-xs'>SOAL ESAI </span><i class='fa fa-chevron-right'></i></button>
+					</div>";
+		}
+		
+		echo "
+					
+					</td></tr>
 				</table>
-			</div> "; ?>
+			</div>"; ?>
         <script>
 
             $(document).ready(function () {

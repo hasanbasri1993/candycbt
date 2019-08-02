@@ -49,12 +49,12 @@ function dekripsi($string)
 	$uri = $_SERVER['REQUEST_URI'];
 	$pageurl = explode("/",$uri);
 	if($uri=='/') {
-		$homeurl = "http://".$_SERVER['HTTP_HOST'];
+		$homeurl = "https://".$_SERVER['HTTP_HOST'];
 		(isset($pageurl[1])) ? $pg = $pageurl[1] : $pg = '';
 		(isset($pageurl[2])) ? $ac = $pageurl[2] : $ac = '';
 		(isset($pageurl[3])) ? $id = $pageurl[3] : $id = 0;
 	} else {
-		$homeurl = "http://".$_SERVER['HTTP_HOST']."/".$pageurl[1];
+		$homeurl = "https://".$_SERVER['HTTP_HOST']."/".$pageurl[1];
 		(isset($pageurl[2])) ? $pg = $pageurl[2] : $pg = '';
 		(isset($pageurl[3])) ? $ac = $pageurl[3] : $ac = '';
 		(isset($pageurl[4])) ? $id = $pageurl[4] : $id = 0;
@@ -69,8 +69,8 @@ function dekripsi($string)
 		//(isset($pageurl[3])) ? $id = $pageurl[3] : $id = 0;
 	
 	
-	$host = 'localhost';
-	$user = 'root';
+	$host = 'devdb.crzd7fqdmi4z.ap-southeast-1.rds.amazonaws.com';
+	$user = 'admin';
 	$pass = 'hjve6uly';
 	$debe = 'candycbtv23';
 	
@@ -85,4 +85,5 @@ function dekripsi($string)
 	$datetime = date('Y-m-d H:i:s');
 	
 	$setting = mysql_fetch_array(mysql_query("SELECT * FROM setting WHERE id_setting='1'"));
+	$semester = mysql_fetch_array(mysql_query("SELECT * FROM semester WHERE status='y'"));
 	$sess = mysql_fetch_array(mysql_query("SELECT * FROM session WHERE id='1'"));

@@ -1,12 +1,4 @@
-*/config/development
-*/logs/log-*.php
-!*/logs/index.html
-*/cache/*
-!*/cache/index.html
-!*/cache/.htaccess
-foto/fotosiswa/*
-!foto/fotosiswa/index.html
-foto/fotoguru/*
-!foto/fotoguru/index.html
-files/*
-!files/index.html
+foto/
+foto/*
+foto
+
